@@ -1,33 +1,30 @@
-import React from 'react'
-import { useEffect, useRef } from "react"
-import rough from "roughjs"
+import React, { useState } from "react";
+import classes from "./index.module.css";
+import classNames from "classnames";
+import { LuRectangleHorizontal } from "react-icons/lu";
+import { FaSlash } from "react-icons/fa";
 const Toolbox = () => {
-  console.log("Toolbox component rendered");
-  const canvasRef = useRef();
-  useEffect(()=>{
-      console.log("use effect executed");
-      const canvas = canvasRef.current;
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      // let ctx = canvas.getContext('2d');
-      let rc = rough.canvas(canvas);
-      let generator = rc.generator;
-      let rect1 = generator.rectangle(10, 10, 100, 100);
-      let rect2 = generator.rectangle(10, 120, 100, 100, {fill: 'red'});
-      rc.draw(rect1);
-      rc.draw(rect2);
-      // ctx.fillStyle = "#ff0000";
-      // ctx.fillRect(0,0,150,200);
-
-
-  },[]);
-  
-  console.log("Toolbox component end");
+  const [activeItem, setactiveItem] = useState("");
   return (
-    <>
-        <canvas id="myCanvas"  ref={canvasRef}>Your browser does not support the HTML canvas tag.</canvas>
-    </>
-  )
-}
+    <div className={classes.container}>
+      <div
+        className={classNames(classes.toolItem, {
+          [classes.active]: activeItem == "Rectangle",
+        })}
+        onClick={() => setactiveItem("Rectangle")}
+      >
+        <LuRectangleHorizontal />
+      </div>
+      <div
+        className={classNames(classes.toolItem, {
+          [classes.active]: activeItem == "Slash",
+        })}
+        onClick={() => setactiveItem("Slash")}
+      >
+        <FaSlash />
+      </div>
+    </div>
+  );
+};
 
-export default Toolbox
+export default Toolbox;

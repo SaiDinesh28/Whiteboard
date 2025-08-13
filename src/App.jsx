@@ -1,11 +1,12 @@
-import Toolbox from "./components/Toolbox"
+import Board from "./components/Board";
+import Toolbox from "./components/Toolbox";
 function App() {
-  
   return (
     <>
-    <Toolbox/>
+      <Toolbox />
+      <Board />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
