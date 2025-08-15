@@ -2,15 +2,18 @@ import React, { useContext, useLayoutEffect } from "react";
 import { useEffect, useRef } from "react";
 import rough from "roughjs";
 import boardContext from "../../store/board-context";
+import propertiesContext from "../../store/properties-box-context";
 const Board = () => {
   console.log("Board component rendered");
   const {
     elements,
+    activeItem,
+    toolActionType,
     handleMouseDownBoard,
     handleMouseMoveBoard,
-    toolActionType,
     handleMouseUpBoard,
   } = useContext(boardContext);
+  const { propertiesBoxState } = useContext(propertiesContext);
   const canvasRef = useRef();
   useEffect(() => {
     console.log("use effect executed");
@@ -33,7 +36,12 @@ const Board = () => {
 
   function handleMouseDown(event) {
     // console.log(event.target);
-    handleMouseDownBoard(event);
+    handleMouseDownBoard(
+      event,
+      propertiesBoxState[activeItem]?.stroke,
+      propertiesBoxState[activeItem]?.fill,
+      propertiesBoxState[activeItem]?.size
+    );
   }
   function handleMouseMove(event) {
     if (toolActionType === "DRAWING") {

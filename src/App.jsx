@@ -1,4 +1,5 @@
 import Board from "./components/Board";
+import PropertiesBox from "./components/PropertiesBox";
 import Toolbox from "./components/Toolbox";
 import BoardProvider from "./store/BoardProvider";
 import PropertiesBoxProvider from "./store/PropertiesBoxProvider";
@@ -6,12 +7,13 @@ function App() {
   console.log("App rendered");
   return (
     <>
-      <BoardProvider>
-        <PropertiesBoxProvider>
+      <PropertiesBoxProvider>
+        <BoardProvider>
           <Toolbox />
           <Board />
-        </PropertiesBoxProvider>
-      </BoardProvider>
+          <PropertiesBox />
+        </BoardProvider>
+      </PropertiesBoxProvider>
     </>
   );
 }

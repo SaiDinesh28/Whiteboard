@@ -2,17 +2,37 @@ import React from "react";
 import rough from "roughjs/bin/rough";
 import { getArrowCoordinates } from "./math";
 const gen = rough.generator();
-const createRoughElement = (id, x1, y1, x2, y2, { type }) => {
+const createRoughElement = (
+  id,
+  x1,
+  y1,
+  x2,
+  y2,
+  { type, stroke, fill, size }
+) => {
   let newElement = {
     id,
     x1,
     y1,
     x2,
     y2,
+    stroke,
+    fill,
+    size,
   };
   let options = {
     seed: id + 1,
+    fillStyle: "solid",
   };
+  if (stroke) {
+    options.stroke = stroke;
+  }
+  if (fill) {
+    options.fill = fill;
+  }
+  if (size) {
+    options.strokeWidth = size;
+  }
   switch (type) {
     case "LINE":
       {
@@ -28,7 +48,7 @@ const createRoughElement = (id, x1, y1, x2, y2, { type }) => {
       {
         const diameter =
           2 * Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
-        newElement.roughEle = gen.circle(x1, y1, diameter);
+        newElement.roughEle = gen.circle(x1, y1, diameter, options);
       }
       break;
     case "ARROW":

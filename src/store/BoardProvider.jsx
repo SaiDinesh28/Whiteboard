@@ -20,15 +20,8 @@ const BoardProvider = ({ children }) => {
         };
       }
       case "DRAW_DOWN": {
-        const { clientX, clientY } = action.payload;
-        // const newRoughEle = {
-        //   id: state.elements.length,
-        //   x1: clientX,
-        //   y1: clientY,
-        //   x2: clientX,
-        //   y2: clientY,
-        //   roughEle: gen.line(clientX, clientY, clientX, clientY),
-        // };
+        const { clientX, clientY, strokeColor, fillColor, size } =
+          action.payload;
         const prevElements = state.elements;
         const newRoughEle = createRoughElement(
           state.elements.length,
@@ -36,7 +29,7 @@ const BoardProvider = ({ children }) => {
           clientY,
           clientX,
           clientY,
-          { type: state.activeItem }
+          { type: state.activeItem, stroke: strokeColor, fill: fillColor, size }
         );
 
         return {
@@ -49,17 +42,12 @@ const BoardProvider = ({ children }) => {
         const { clientX, clientY } = action.payload;
         let lastInd = state.elements.length - 1;
         let newElements = [...state.elements];
-        const { id, x1, y1 } = newElements[lastInd];
-        // newElements[lastInd].x2 = clientX;
-        // newElements[lastInd].y2 = clientY;
-        // newElements[lastInd].roughEle = gen.line(
-        //   newElements[lastInd].x1,
-        //   newElements[lastInd].y1,
-        //   clientX,
-        //   clientY
-        // );
+        const { id, x1, y1, stroke, fill, size } = newElements[lastInd];
         const newRoughEle = createRoughElement(id, x1, y1, clientX, clientY, {
           type: state.activeItem,
+          stroke,
+          fill,
+          size,
         });
         newElements[lastInd] = newRoughEle;
         return {
@@ -91,12 +79,15 @@ const BoardProvider = ({ children }) => {
       },
     });
   };
-  const handleMouseDown = (event) => {
+  const handleMouseDown = (event, strokeColor, fillColor, brushSize) => {
     dispatchboardStateAction({
       type: "DRAW_DOWN",
       payload: {
         clientX: event.clientX,
         clientY: event.clientY,
+        strokeColor,
+        fillColor,
+        size: brushSize,
       },
     });
   };

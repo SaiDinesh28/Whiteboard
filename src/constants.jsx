@@ -7,3 +7,9 @@ export const COLORS = {
   YELLOW: "#ffff00",
   WHITE: "#ffffff",
 };
+
+export const STROKE_TOOLS = ["LINE", "RECTANGLE", "CIRCLE", "ARROW"];
+
+export const FILL_TOOLS = ["RECTANGLE", "CIRCLE"];
+
+export const SIZE_TOOLS = ["LINE", "RECTANGLE", "CIRCLE", "ARROW"];
