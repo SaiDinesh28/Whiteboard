@@ -2,30 +2,47 @@ import React, { useContext, useState } from "react";
 import classes from "./index.module.css";
 import classNames from "classnames";
 import { LuRectangleHorizontal } from "react-icons/lu";
-import { FaSlash } from "react-icons/fa";
+import { FaSlash, FaRegCircle,FaArrowRight } from "react-icons/fa";
 import boardContext from "../../store/board-context";
 const Toolbox = () => {
-  console.log("Tool box component started rendering")
+  console.log("Tool box component started rendering");
   // const [activeItem, setactiveItem] = useState("");
-  const { activeItem ,handlesetactiveItem} = useContext(boardContext);
-  console.log("Tool box component rendering completed")
+  const { activeItem, handlesetactiveItem } = useContext(boardContext);
+  console.log("Tool box component rendering completed");
   return (
     <div className={classes.container}>
       <div
         className={classNames(classes.toolItem, {
-          [classes.active]: activeItem == "Rectangle",
+          [classes.active]: activeItem == "LINE",
         })}
-        onClick={() => handlesetactiveItem("Rectangle")}
+        onClick={() => handlesetactiveItem("LINE")}
       >
-        <LuRectangleHorizontal />
+        <FaSlash />
       </div>
       <div
         className={classNames(classes.toolItem, {
-          [classes.active]: activeItem == "Slash",
+          [classes.active]: activeItem == "RECTANGLE",
         })}
-        onClick={() => handlesetactiveItem("Slash")}
+        onClick={() => handlesetactiveItem("RECTANGLE")}
       >
-        <FaSlash />
+        <LuRectangleHorizontal size={30} />
+      </div>
+
+      <div
+        className={classNames(classes.toolItem, {
+          [classes.active]: activeItem == "CIRCLE",
+        })}
+        onClick={() => handlesetactiveItem("CIRCLE")}
+      >
+        <FaRegCircle />
+      </div>
+      <div
+        className={classNames(classes.toolItem, {
+          [classes.active]: activeItem == "ARROW",
+        })}
+        onClick={() => handlesetactiveItem("ARROW")}
+      >
+        <FaArrowRight />
       </div>
     </div>
   );

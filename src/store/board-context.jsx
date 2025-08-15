@@ -3,8 +3,11 @@ import { createContext } from "react";
 const boardContext = createContext({
   activeItem: "",
   elements: [],
-  handlesetactiveItem : ()=>{},
-  handleMouseDownBoard : ()=>{}
+  toolActionType : "NONE",
+  handlesetactiveItem: () => {},
+  handleMouseDownBoard: () => {},
+  handleMouseMoveBoard: () => {},
+  handleMouseUpBoard: ()=>{},
 });
 
 export default boardContext;
