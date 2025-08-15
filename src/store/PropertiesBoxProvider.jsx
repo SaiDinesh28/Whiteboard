@@ -44,6 +44,9 @@ const initialpropertiesBoxState = {
     stroke: COLORS.BLACK,
     size: 1,
   },
+  BRUSH: {
+    stroke: COLORS.BLACK,
+  },
 };
 
 const PropertiesBoxProvider = ({ children }) => {

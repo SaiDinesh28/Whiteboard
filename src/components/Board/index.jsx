@@ -27,7 +27,21 @@ const Board = () => {
     let ctx = canvas.getContext("2d");
     let rc = rough.canvas(canvas);
     elements.forEach((ele) => {
-      rc.draw(ele.roughEle);
+      switch (ele.type) {
+        case "LINE":
+        case "RECTANGLE":
+        case "CIRCLE":
+        case "ARROW":
+          rc.draw(ele.roughEle);
+          break;
+        case "BRUSH":
+          ctx.fillStyle = ele.stroke;
+          ctx.fill(ele.path);
+          ctx.restore();
+          break;
+        default:
+          throw new Error("Type not found");
+      }
     });
     return () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);

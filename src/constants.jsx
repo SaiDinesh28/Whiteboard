@@ -8,7 +8,7 @@ export const COLORS = {
   WHITE: "#ffffff",
 };
 
-export const STROKE_TOOLS = ["LINE", "RECTANGLE", "CIRCLE", "ARROW"];
+export const STROKE_TOOLS = ["LINE", "RECTANGLE", "CIRCLE", "ARROW", "BRUSH"];
 
 export const FILL_TOOLS = ["RECTANGLE", "CIRCLE"];
 

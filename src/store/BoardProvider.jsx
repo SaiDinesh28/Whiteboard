@@ -3,6 +3,8 @@ import createRoughElement from "../utils/createRoughElement";
 import React, { useReducer } from "react";
 // import { useState } from "react";
 import rough from "roughjs/bin/rough";
+import { getSvgPathFromStroke } from "../utils/math";
+import getStroke from "perfect-freehand";
 const gen = rough.generator();
 
 const BoardProvider = ({ children }) => {
@@ -29,14 +31,36 @@ const BoardProvider = ({ children }) => {
           clientY,
           clientX,
           clientY,
-          { type: state.activeItem, stroke: strokeColor, fill: fillColor, size }
+          {
+            type: state.activeItem,
+            stroke: strokeColor,
+            fill: fillColor,
+            size,
+          }
         );
-
-        return {
-          ...state,
-          toolActionType: "DRAWING",
-          elements: [...prevElements, newRoughEle],
-        };
+        switch (state.activeItem) {
+          case "LINE":
+          case "RECTANGLE":
+          case "CIRCLE":
+          case "ARROW": {
+            return {
+              ...state,
+              toolActionType: "DRAWING",
+              elements: [...prevElements, newRoughEle],
+            };
+          }
+          case "BRUSH": {
+            newRoughEle.points = [{ x: clientX, y: clientY }];
+            newRoughEle.path = new Path2D(
+              getSvgPathFromStroke(getStroke(newRoughEle.points))
+            );
+            return {
+              ...state,
+              toolActionType: "DRAWING",
+              elements: [...prevElements, newRoughEle],
+            };
+          }
+        }
       }
       case "DRAW_MOVE": {
         const { clientX, clientY } = action.payload;
@@ -49,11 +73,33 @@ const BoardProvider = ({ children }) => {
           fill,
           size,
         });
-        newElements[lastInd] = newRoughEle;
-        return {
-          ...state,
-          elements: [...newElements],
-        };
+
+        switch (state.activeItem) {
+          case "LINE":
+          case "RECTANGLE":
+          case "CIRCLE":
+          case "ARROW": {
+            newElements[lastInd] = newRoughEle;
+            return {
+              ...state,
+              elements: [...newElements],
+            };
+          }
+          case "BRUSH": {
+            newRoughEle.points = [
+              ...newElements[lastInd].points,
+              { x: clientX, y: clientY },
+            ];
+            newRoughEle.path = new Path2D(
+              getSvgPathFromStroke(getStroke(newRoughEle.points))
+            );
+            newElements[lastInd] = newRoughEle;
+            return {
+              ...state,
+              elements: [...newElements],
+            };
+          }
+        }
       }
       case "DRAW_UP": {
         return {

@@ -16,6 +16,7 @@ const createRoughElement = (
     y1,
     x2,
     y2,
+    type,
     stroke,
     fill,
     size,
@@ -51,26 +52,20 @@ const createRoughElement = (
         newElement.roughEle = gen.circle(x1, y1, diameter, options);
       }
       break;
-    case "ARROW":
-      {
-        const arrowLength = 20;
-        const [x3, y3, x4, y4] = getArrowCoordinates(
-          x1,
-          y1,
-          x2,
-          y2,
-          arrowLength
-        );
-        const points = [
-          [x1, y1],
-          [x2, y2],
-          [x3, y3],
-          [x2, y2],
-          [x4, y4],
-          [x2, y2],
-        ];
-        newElement.roughEle = gen.linearPath(points, options);
-      }
+    case "ARROW": {
+      const arrowLength = 20;
+      const [x3, y3, x4, y4] = getArrowCoordinates(x1, y1, x2, y2, arrowLength);
+      const points = [
+        [x1, y1],
+        [x2, y2],
+        [x3, y3],
+        [x2, y2],
+        [x4, y4],
+        [x2, y2],
+      ];
+      newElement.roughEle = gen.linearPath(points, options);
+    }
+    case "BRUSH":
       break;
     case "DEFAULT": {
       throw Error("Type is invalid");
