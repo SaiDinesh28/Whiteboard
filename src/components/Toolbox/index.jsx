@@ -9,12 +9,15 @@ import {
   FaPaintBrush,
   FaEraser,
   FaFont,
+  FaUndoAlt,
+  FaRedoAlt,
 } from "react-icons/fa";
 import boardContext from "../../store/board-context";
 const Toolbox = () => {
   console.log("Tool box component started rendering");
   // const [activeItem, setactiveItem] = useState("");
-  const { activeItem, handlesetactiveItem } = useContext(boardContext);
+  const { activeItem, undo, redo, handlesetactiveItem } =
+    useContext(boardContext);
   console.log("Tool box component rendering completed");
   return (
     <div className={classes.container}>
@@ -74,6 +77,12 @@ const Toolbox = () => {
         onClick={() => handlesetactiveItem("TEXT")}
       >
         <FaFont />
+      </div>
+      <div className={classNames(classes.toolItem)} onClick={undo}>
+        <FaUndoAlt />
+      </div>
+      <div className={classNames(classes.toolItem)} onClick={redo}>
+        <FaRedoAlt />
       </div>
     </div>
   );

@@ -11,8 +11,10 @@ const gen = rough.generator();
 const BoardProvider = ({ children }) => {
   const initialboardState = {
     activeItem: "LINE",
-    elements: [],
     toolActionType: "NONE",
+    elements: [],
+    history: [[]],
+    index: 0,
   };
   const boardReducer = (state, action) => {
     switch (action.type) {
@@ -117,30 +119,66 @@ const BoardProvider = ({ children }) => {
         }
       }
       case "DRAW_UP": {
+        let newElements = [...state.elements];
+        let newHistory = state.history.slice(0, state.index + 1);
+        newHistory.push(newElements);
         return {
           ...state,
-          toolActionType: "NONE",
+          history: newHistory,
+          index: state.index + 1,
         };
       }
       case "ERASE_ELEMENT": {
         const { clientX, clientY } = action.payload;
-        let newElements = state.elements;
+        let newElements = [...state.elements];
         newElements = newElements.filter((ele) => {
           return !isPointNearElement(ele, clientX, clientY);
         });
+        let newHistory = state.history.slice(0, state.index + 1);
+        let newIndex = state.index;
+        if (newElements.length !== state.elements.length) {
+          newHistory.push(newElements);
+          newIndex += 1;
+        }
         return {
           ...state,
           elements: newElements,
+          history: newHistory,
+          index: newIndex,
         };
       }
       case "CHANGE_TEXT": {
         let newElements = [...state.elements];
         let lastInd = newElements.length - 1;
         newElements[lastInd].text = action.payload.text;
+        let newHistory = state.history.slice(0, state.index - 1);
+        newHistory.push(newElements);
         return {
           ...state,
           elements: newElements,
+          history: newHistory,
+          index: state.index + 1,
           toolActionType: "NONE",
+        };
+      }
+      case "UNDO": {
+        if (state.index <= 0) return state;
+        // console.log("action dispacthed undo ");
+        let newElements = state.history[state.index - 1];
+        console.log(newElements);
+        return {
+          ...state,
+          elements: newElements,
+          index: state.index - 1,
+        };
+      }
+      case "REDO": {
+        if (state.index >= state.history.length - 1) return state;
+        let newElements = state.history[state.index + 1];
+        return {
+          ...state,
+          elements: newElements,
+          index: state.index + 1,
         };
       }
       default:
@@ -204,6 +242,11 @@ const BoardProvider = ({ children }) => {
   };
   const handleMouseUp = () => {
     if (boardState.toolActionType === "WRITING") return;
+    if (boardState.toolActionType === "DRAWING") {
+      dispatchboardStateAction({
+        type: "DRAW_UP",
+      });
+    }
     dispatchboardStateAction({
       type: "CHANGE_ACTION_TYPE",
       payload: {
@@ -212,12 +255,6 @@ const BoardProvider = ({ children }) => {
     });
   };
   const handleonBlur = (text) => {
-    // dispatchboardStateAction({
-    //   type: "CHANGE_ACTION_TYPE",
-    //   payload: {
-    //     actionType: "NONE",
-    //   },
-    // });
     dispatchboardStateAction({
       type: "CHANGE_TEXT",
       payload: {
@@ -225,15 +262,30 @@ const BoardProvider = ({ children }) => {
       },
     });
   };
+  const handleUndo = () => {
+    // console.log("handle undo entered");
+    dispatchboardStateAction({
+      type: "UNDO",
+    });
+  };
+  const handleRedo = () => {
+    dispatchboardStateAction({
+      type: "REDO",
+    });
+  };
   const boardProviderValue = {
     activeItem: boardState.activeItem,
-    elements: boardState.elements,
     toolActionType: boardState.toolActionType,
+    elements: boardState.elements,
+    history: boardState.history,
+    index: boardState.index,
     handlesetactiveItem,
     handleMouseDownBoard: handleMouseDown,
     handleMouseMoveBoard: handleMouseMove,
     handleMouseUpBoard: handleMouseUp,
     handleonBlurBoard: handleonBlur,
+    undo: handleUndo,
+    redo: handleRedo,
   };
   return (
     <boardContext.Provider value={boardProviderValue}>
