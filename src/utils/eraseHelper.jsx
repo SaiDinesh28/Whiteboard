@@ -24,6 +24,32 @@ export const isPointNearElement = (element, pointX, pointY) => {
     case "BRUSH": {
       return ctx.isPointInPath(element.path, pointX, pointY);
     }
+    case "TEXT": {
+      ctx.font = `${element.size}px Caveat`;
+      const textWidth = ctx.measureText(element.text).width;
+      const textHeight = parseInt(element.size);
+      ctx.restore();
+      return (
+        isPointNearLine(x1, y1, x1 + textWidth, y1, pointX, pointY) ||
+        isPointNearLine(
+          x1 + textWidth,
+          y1,
+          x1 + textWidth,
+          y1 + textHeight,
+          pointX,
+          pointY
+        ) ||
+        isPointNearLine(
+          x1 + textWidth,
+          y1 + textHeight,
+          x1,
+          y1 + textHeight,
+          pointX,
+          pointY
+        ) ||
+        isPointNearLine(x1, y1 + textHeight, x1, y1, pointX, pointY)
+      );
+    }
     case "DEFAULT":
       break;
   }

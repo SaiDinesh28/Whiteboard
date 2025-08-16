@@ -10,7 +10,7 @@ const gen = rough.generator();
 
 const BoardProvider = ({ children }) => {
   const initialboardState = {
-    activeItem: "LINE",
+    activeItem: "BRUSH",
     toolActionType: "NONE",
     elements: [],
     history: [[]],
@@ -151,7 +151,7 @@ const BoardProvider = ({ children }) => {
         let newElements = [...state.elements];
         let lastInd = newElements.length - 1;
         newElements[lastInd].text = action.payload.text;
-        let newHistory = state.history.slice(0, state.index - 1);
+        let newHistory = state.history.slice(0, state.index + 1);
         newHistory.push(newElements);
         return {
           ...state,

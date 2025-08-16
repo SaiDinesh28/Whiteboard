@@ -11,6 +11,7 @@ import {
   FaFont,
   FaUndoAlt,
   FaRedoAlt,
+  FaDownload,
 } from "react-icons/fa";
 import boardContext from "../../store/board-context";
 const Toolbox = () => {
@@ -18,7 +19,16 @@ const Toolbox = () => {
   // const [activeItem, setactiveItem] = useState("");
   const { activeItem, undo, redo, handlesetactiveItem } =
     useContext(boardContext);
-  console.log("Tool box component rendering completed");
+  const handleDownloadClick = () => {
+    const canvas = document.getElementById("myCanvas");
+    const data = canvas.toDataURL("image/png");
+    const anchorTag = document.createElement("a");
+    anchorTag.href = data;
+    anchorTag.download = "board.png";
+    document.body.appendChild(anchorTag);
+    anchorTag.click();
+    document.body.removeChild(anchorTag);
+  };
   return (
     <div className={classes.container}>
       <div
@@ -83,6 +93,12 @@ const Toolbox = () => {
       </div>
       <div className={classNames(classes.toolItem)} onClick={redo}>
         <FaRedoAlt />
+      </div>
+      <div
+        className={classNames(classes.toolItem)}
+        onClick={handleDownloadClick}
+      >
+        <FaDownload />
       </div>
     </div>
   );

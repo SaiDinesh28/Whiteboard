@@ -22,6 +22,14 @@ const PropertiesBox = () => {
         <div className={classNames(classes.selectOptionContainer)}>
           <div className={classes.toolBoxLabel}>Stroke Color</div>
           <div className={classNames(classes.colorsContainer)}>
+            <div>
+              <input
+                className={classes.colorPicker}
+                type="color"
+                value={strokeColor}
+                onChange={(e) => handlechangeStroke(activeItem, e.target.value)}
+              ></input>
+            </div>
             {Object.keys(COLORS).map((k) => {
               return (
                 <div
@@ -41,6 +49,30 @@ const PropertiesBox = () => {
         <div className={classNames(classes.selectOptionContainer)}>
           <div className={classes.toolBoxLabel}>Fill Color</div>
           <div className={classNames(classes.colorsContainer)}>
+            {fillColor === null ? (
+              <div
+                className={classNames(
+                  classes.noFillColorBox,
+                  classes.colorPicker
+                )}
+                onClick={() => handlechangeFill(activeItem, "BLACK")}
+              ></div>
+            ) : (
+              <div>
+                <input
+                  className={classes.colorPicker}
+                  type="color"
+                  value={fillColor}
+                  onChange={(e) => handlechangeFill(activeItem, e.target.value)}
+                ></input>
+              </div>
+            )}
+            <div
+              className={classNames(classes.colorBox, classes.noFillColorBox, {
+                [classes.activeColorBox]: fillColor === null,
+              })}
+              onClick={() => handlechangeFill(activeItem, null)}
+            ></div>
             {Object.keys(COLORS).map((k) => {
               return (
                 <div
