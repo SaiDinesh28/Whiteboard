@@ -14,6 +14,8 @@ const Board = () => {
     handleMouseMoveBoard,
     handleMouseUpBoard,
     handleonBlurBoard,
+    undo,
+    redo,
   } = useContext(boardContext);
   const { propertiesBoxState } = useContext(propertiesContext);
   const canvasRef = useRef();
@@ -32,6 +34,22 @@ const Board = () => {
       }, 0);
     }
   }, [toolActionType]);
+
+  useEffect(() => {
+    function handleKeyDown(event) {
+      if (event.ctrlKey && event.key == "z") {
+        undo();
+      }
+      if (event.ctrlKey && event.key == "y") {
+        redo();
+      }
+    }
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [undo, redo]);
 
   useLayoutEffect(() => {
     const canvas = canvasRef.current;

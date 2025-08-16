@@ -1,6 +1,6 @@
 import boardContext from "./board-context";
 import createRoughElement from "../utils/createRoughElement";
-import React, { useReducer } from "react";
+import React, { useCallback, useReducer } from "react";
 // import { useState } from "react";
 import rough from "roughjs/bin/rough";
 import { getSvgPathFromStroke } from "../utils/math";
@@ -262,17 +262,17 @@ const BoardProvider = ({ children }) => {
       },
     });
   };
-  const handleUndo = () => {
+  const handleUndo = useCallback(() => {
     // console.log("handle undo entered");
     dispatchboardStateAction({
       type: "UNDO",
     });
-  };
-  const handleRedo = () => {
+  });
+  const handleRedo = useCallback(() => {
     dispatchboardStateAction({
       type: "REDO",
     });
-  };
+  });
   const boardProviderValue = {
     activeItem: boardState.activeItem,
     toolActionType: boardState.toolActionType,
