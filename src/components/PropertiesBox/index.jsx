@@ -58,11 +58,13 @@ const PropertiesBox = () => {
       )}
       {SIZE_TOOLS.includes(activeItem) && (
         <div className={classNames(classes.selectOptionContainer)}>
-          <div className={classNames(classes.toolBoxLabel)}> Brush Size</div>
+          <div className={classNames(classes.toolBoxLabel)}>
+            {activeItem === "TEXT" ? "TEXT SIZE" : "BRUSH SIZE"}
+          </div>
           <input
             type="range"
-            min={1}
-            max={10}
+            min={activeItem === "TEXT" ? 12 : 1}
+            max={activeItem === "TEXT" ? 64 : 10}
             value={brushSize}
             step={1}
             onChange={(e) => handlechangeSize(activeItem, e.target.value)}

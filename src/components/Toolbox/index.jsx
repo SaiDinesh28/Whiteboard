@@ -8,6 +8,7 @@ import {
   FaArrowRight,
   FaPaintBrush,
   FaEraser,
+  FaFont,
 } from "react-icons/fa";
 import boardContext from "../../store/board-context";
 const Toolbox = () => {
@@ -65,6 +66,14 @@ const Toolbox = () => {
         onClick={() => handlesetactiveItem("ERASE")}
       >
         <FaEraser />
+      </div>
+      <div
+        className={classNames(classes.toolItem, {
+          [classes.active]: activeItem == "TEXT",
+        })}
+        onClick={() => handlesetactiveItem("TEXT")}
+      >
+        <FaFont />
       </div>
     </div>
   );

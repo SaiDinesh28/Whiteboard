@@ -67,6 +67,10 @@ const createRoughElement = (
     }
     case "BRUSH":
       break;
+    case "TEXT":{
+      newElement.text = "";
+      return newElement;
+    }
     case "DEFAULT": {
       throw Error("Type is invalid");
     }

@@ -67,6 +67,14 @@ const BoardProvider = ({ children }) => {
               elements: [...prevElements, newRoughEle],
             };
           }
+          case "TEXT": {
+            // if (state.toolActionType === "WRITING") return state;
+            return {
+              ...state,
+              toolActionType: "WRITING",
+              elements: [...prevElements, newRoughEle],
+            };
+          }
         }
       }
       case "DRAW_MOVE": {
@@ -125,6 +133,16 @@ const BoardProvider = ({ children }) => {
           elements: newElements,
         };
       }
+      case "CHANGE_TEXT": {
+        let newElements = [...state.elements];
+        let lastInd = newElements.length - 1;
+        newElements[lastInd].text = action.payload.text;
+        return {
+          ...state,
+          elements: newElements,
+          toolActionType: "NONE",
+        };
+      }
       default:
         return state;
     }
@@ -144,6 +162,7 @@ const BoardProvider = ({ children }) => {
     });
   };
   const handleMouseDown = (event, strokeColor, fillColor, brushSize) => {
+    if (boardState.toolActionType === "WRITING") return;
     if (boardState.activeItem === "ERASE") {
       dispatchboardStateAction({
         type: "CHANGE_ACTION_TYPE",
@@ -184,10 +203,25 @@ const BoardProvider = ({ children }) => {
     }
   };
   const handleMouseUp = () => {
+    if (boardState.toolActionType === "WRITING") return;
     dispatchboardStateAction({
       type: "CHANGE_ACTION_TYPE",
       payload: {
         actionType: "NONE",
+      },
+    });
+  };
+  const handleonBlur = (text) => {
+    // dispatchboardStateAction({
+    //   type: "CHANGE_ACTION_TYPE",
+    //   payload: {
+    //     actionType: "NONE",
+    //   },
+    // });
+    dispatchboardStateAction({
+      type: "CHANGE_TEXT",
+      payload: {
+        text: text,
       },
     });
   };
@@ -199,6 +233,7 @@ const BoardProvider = ({ children }) => {
     handleMouseDownBoard: handleMouseDown,
     handleMouseMoveBoard: handleMouseMove,
     handleMouseUpBoard: handleMouseUp,
+    handleonBlurBoard: handleonBlur,
   };
   return (
     <boardContext.Provider value={boardProviderValue}>
