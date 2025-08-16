@@ -7,6 +7,7 @@ import {
   FaRegCircle,
   FaArrowRight,
   FaPaintBrush,
+  FaEraser,
 } from "react-icons/fa";
 import boardContext from "../../store/board-context";
 const Toolbox = () => {
@@ -56,6 +57,14 @@ const Toolbox = () => {
         onClick={() => handlesetactiveItem("ARROW")}
       >
         <FaArrowRight />
+      </div>
+      <div
+        className={classNames(classes.toolItem, {
+          [classes.active]: activeItem == "ERASE",
+        })}
+        onClick={() => handlesetactiveItem("ERASE")}
+      >
+        <FaEraser />
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ import React, { useReducer } from "react";
 // import { useState } from "react";
 import rough from "roughjs/bin/rough";
 import { getSvgPathFromStroke } from "../utils/math";
+import { isPointNearElement } from "../utils/eraseHelper";
 import getStroke from "perfect-freehand";
 const gen = rough.generator();
 
@@ -19,6 +20,12 @@ const BoardProvider = ({ children }) => {
         return {
           ...state,
           activeItem: action.payload.tool,
+        };
+      }
+      case "CHANGE_ACTION_TYPE": {
+        return {
+          ...state,
+          toolActionType: action.payload.actionType,
         };
       }
       case "DRAW_DOWN": {
@@ -104,7 +111,18 @@ const BoardProvider = ({ children }) => {
       case "DRAW_UP": {
         return {
           ...state,
-          toolActionType: "None",
+          toolActionType: "NONE",
+        };
+      }
+      case "ERASE_ELEMENT": {
+        const { clientX, clientY } = action.payload;
+        let newElements = state.elements;
+        newElements = newElements.filter((ele) => {
+          return !isPointNearElement(ele, clientX, clientY);
+        });
+        return {
+          ...state,
+          elements: newElements,
         };
       }
       default:
@@ -126,6 +144,15 @@ const BoardProvider = ({ children }) => {
     });
   };
   const handleMouseDown = (event, strokeColor, fillColor, brushSize) => {
+    if (boardState.activeItem === "ERASE") {
+      dispatchboardStateAction({
+        type: "CHANGE_ACTION_TYPE",
+        payload: {
+          actionType: "ERASING",
+        },
+      });
+      return;
+    }
     dispatchboardStateAction({
       type: "DRAW_DOWN",
       payload: {
@@ -138,17 +165,30 @@ const BoardProvider = ({ children }) => {
     });
   };
   const handleMouseMove = (event) => {
-    dispatchboardStateAction({
-      type: "DRAW_MOVE",
-      payload: {
-        clientX: event.clientX,
-        clientY: event.clientY,
-      },
-    });
+    if (boardState.toolActionType === "DRAWING") {
+      dispatchboardStateAction({
+        type: "DRAW_MOVE",
+        payload: {
+          clientX: event.clientX,
+          clientY: event.clientY,
+        },
+      });
+    } else if (boardState.toolActionType === "ERASING") {
+      dispatchboardStateAction({
+        type: "ERASE_ELEMENT",
+        payload: {
+          clientX: event.clientX,
+          clientY: event.clientY,
+        },
+      });
+    }
   };
   const handleMouseUp = () => {
     dispatchboardStateAction({
-      type: "DRAW_UP",
+      type: "CHANGE_ACTION_TYPE",
+      payload: {
+        actionType: "NONE",
+      },
     });
   };
   const boardProviderValue = {

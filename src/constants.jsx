@@ -13,3 +13,5 @@ export const STROKE_TOOLS = ["LINE", "RECTANGLE", "CIRCLE", "ARROW", "BRUSH"];
 export const FILL_TOOLS = ["RECTANGLE", "CIRCLE"];
 
 export const SIZE_TOOLS = ["LINE", "RECTANGLE", "CIRCLE", "ARROW"];
+
+export const ERASE_THRESHOLD = 5;

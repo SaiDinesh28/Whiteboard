@@ -58,9 +58,7 @@ const Board = () => {
     );
   }
   function handleMouseMove(event) {
-    if (toolActionType === "DRAWING") {
-      handleMouseMoveBoard(event);
-    }
+    handleMouseMoveBoard(event);
   }
   function handleMouseUp() {
     handleMouseUpBoard();

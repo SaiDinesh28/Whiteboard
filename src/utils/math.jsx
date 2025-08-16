@@ -1,3 +1,5 @@
+import { ERASE_THRESHOLD } from "../constants";
+
 export const getArrowCoordinates = (x1, y1, x2, y2, len) => {
   const slopeAngle = Math.atan2(y2 - y1, x2 - x1);
   const x3 = x2 - len * Math.cos(slopeAngle - Math.PI / 6);
@@ -41,3 +43,14 @@ export function getSvgPathFromStroke(points, closed = true) {
 
   return result;
 }
+
+export const distanceBetweenPoints = (x1, y1, x2, y2) => {
+  return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+};
+export const isPointNearLine = (x1, y1, x2, y2, pointX, pointY) => {
+  const d = distanceBetweenPoints(x1, y1, x2, y2);
+  const d1 = distanceBetweenPoints(x1, y1, pointX, pointY);
+  const d2 = distanceBetweenPoints(x2, y2, pointX, pointY);
+  if (Math.abs(d1 + d2 - d) < ERASE_THRESHOLD) return true;
+  return false;
+};
